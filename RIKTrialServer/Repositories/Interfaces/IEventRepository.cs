@@ -1,4 +1,4 @@
-﻿using RIKTrialServer.Domain.Models;
+﻿using RIKTrialServer.Domains.Models;
 using RIKTrialServer.Domains.Filters;
 
 namespace RIKTrialServer.Repositories.Interfaces
@@ -7,7 +7,8 @@ namespace RIKTrialServer.Repositories.Interfaces
     {
         Task<Event?> GetEventByID(Guid id);
         Task<List<Event>> GetEvents(EventFilters filters);
-        Task AddEvent(Event e, CancellationToken ctoken);
-        Task UpdateEvent(Event e, CancellationToken ctoken);
+        Task<bool> AddEvent(Event e, CancellationToken ctoken);
+        Task<bool> UpdateEvent(Event e, CancellationToken ctoken);
+        Task<bool> DeleteEvent(Guid id, CancellationToken ctoken);
     }
 }
