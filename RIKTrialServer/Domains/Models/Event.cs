@@ -18,6 +18,16 @@
         {
             _participants.Add(new EventParticipant(Id, participantId));
         }
+
+        public void UnRegisterParticipant(Guid participantId)
+        {
+            EventParticipant? register = _participants.FirstOrDefault(x => x.ParticipantId == participantId);
+
+            if (register == null) return;
+
+            _participants.Remove(register);
+        }
+
     }
 
     

@@ -9,6 +9,6 @@ namespace RIKTrialServer.Repositories.Interfaces
         Task<List<Event>> GetEvents(EventFilters filters);
         Task<bool> AddEvent(Event e, CancellationToken ctoken);
         Task<bool> UpdateEvent(Event e, CancellationToken ctoken);
-        Task<bool> DeleteEvent(Guid id, CancellationToken ctoken);
+        Task<bool> RemoveEvent(Event e, CancellationToken ctoken);
     }
 }

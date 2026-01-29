@@ -3,7 +3,7 @@
     public abstract class Participant
     {
         public Guid Id { get; set; }
-        public int? PaymentMethodId { get; set; }
+        public int PaymentMethodId { get; set; }
 
         public abstract int ParticipantCount { get; }
 
@@ -24,4 +24,6 @@
         }
 
     }
+
+
 }
