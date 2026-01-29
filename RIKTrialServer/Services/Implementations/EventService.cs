@@ -1,11 +1,10 @@
 ﻿using RIKTrialServer.Domains.Models;
-using RIKTrialSharedModels.Domain.Creation;
-using RIKTrialSharedModels.Domain.Returns;
-using RIKTrialSharedModels.Domains.Filters;
 using RIKTrialServer.Repositories.Interfaces;
 using RIKTrialServer.Services.Interfaces;
 using RIKTrialServer.Transformers;
-using System.Reflection.Metadata.Ecma335;
+using RIKTrialSharedModels.Domain.Creation;
+using RIKTrialSharedModels.Domain.Returns;
+using RIKTrialSharedModels.Domains.Filters;
 
 namespace RIKTrialServer.Services.Implementations
 {
@@ -30,14 +29,14 @@ namespace RIKTrialServer.Services.Implementations
 
         public async Task DeleteEvent(Guid eventId, CancellationToken ctoken)
         {
-            Event? ev = await _eventRepo.GetEventByID(eventId);
+            Event? ev = await _eventRepo.GetEventByID(eventId)
+                ?? throw new Exception("Proovite kustutada mitte eksisteerivat üritust");
 
-            if (ev == null) throw new Exception("Proovite kustutada mitte eksisteerivat üritust");
             if (ev.Date < DateTime.Now) throw new Exception("Ei saa kustutada minevikust");
 
-            bool suc = await _eventRepo.DeleteEvent(eventId, ctoken);
+            bool suc = await _eventRepo.RemoveEvent(ev, ctoken);
 
-            if(!suc) throw new Exception("Kustutamine ei õnnestunud");
+            if (!suc) throw new Exception("Kustutamine ei õnnestunud");
         }
 
         public async Task<Event?> GetEvent(Guid eventId)
@@ -52,16 +51,31 @@ namespace RIKTrialServer.Services.Implementations
             return events.Select(ev => EventMapper.MapToEventsResponse(ev, ParticipantCount(ev))).ToList();
         }
 
-        public async Task RegisterParticipant(Guid e, Guid participant, CancellationToken ctoken)
+        public  async Task<bool> RegisterParticipant(Guid id, Guid participantId, CancellationToken ctoken)
         {
-            throw new NotImplementedException();
+            Event? e = await _eventRepo.GetEventByID(id) ?? throw new Exception("Üritust ei ole olemas");
+            if (e.Date < DateTime.Now) throw new Exception("Ei saa registreerida mineviku");
+            e.RegisterParticipant(participantId);
+
+            return await _eventRepo.UpdateEvent(e, ctoken);
+        }
+
+        public async Task<bool> UnRegisterParticipant(Guid eventId, Guid participantId, CancellationToken ctoken)
+        {
+            Event? e = await _eventRepo.GetEventByID(eventId) ?? throw new Exception("Üritust ei ole olemas");
+            if (e.Date < DateTime.Now) throw new Exception("Ei saa muuta mineviku");
+            e.UnRegisterParticipant(participantId);
+
+            return await _eventRepo.UpdateEvent(e, ctoken);
         }
 
         // -- helper funcs etc --
 
-        private int ParticipantCount(Event ev)
+        private static int ParticipantCount(Event ev)
         {
             return ev.Participants.Sum(pa => pa.Participant.ParticipantCount);
         }
+
+
     }
 }

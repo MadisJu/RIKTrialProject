@@ -23,9 +23,8 @@ namespace RIKTrialServer.Repositories.Implementations
 
         public async Task<Event?> GetEventByID(Guid id)
         {
-            Event? e = await _dbc.Events.Where(e => e.Id == id).FirstOrDefaultAsync();
 
-            return e;
+            return await _dbc.Events.Where(e => e.Id == id).FirstOrDefaultAsync();
         }
 
         public async Task<List<Event>> GetEvents(EventFilters filters)
@@ -46,17 +45,10 @@ namespace RIKTrialServer.Repositories.Implementations
             return 0 < await _dbc.SaveChangesAsync(ctoken);
         }
 
-        public async Task<bool> DeleteEvent(Guid id, CancellationToken ctoken)
+        public async Task<bool> RemoveEvent(Event e, CancellationToken ctoken)
         {
-            Event? ev = await _dbc.Events.FirstOrDefaultAsync(e => e.Id == id, ctoken);
-
-            if (ev != null)
-            {
-                _dbc.Events.Remove(ev);
-                return (0 < await _dbc.SaveChangesAsync(ctoken)); // if the um affected rows??
-            }
-
-            return false;
+            _dbc.Events.Remove(e);
+            return 0 < await _dbc.SaveChangesAsync(ctoken);
         }
 
         // -- helpers queries whatever whatever --
