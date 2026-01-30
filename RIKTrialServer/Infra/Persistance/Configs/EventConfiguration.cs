@@ -12,6 +12,9 @@ namespace RIKTrialServer.Infra.Persistance.Configs
 
             builder.HasKey(e => e.Id);
 
+            builder.Property(x => x.Id)
+                .ValueGeneratedNever();
+
             builder.Property(e => e.Name)
                 .HasMaxLength(200)
                 .IsRequired();

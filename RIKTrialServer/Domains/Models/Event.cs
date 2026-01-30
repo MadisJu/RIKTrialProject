@@ -13,6 +13,26 @@
         private readonly List<EventParticipant> _participants = new();
         public IReadOnlyCollection<EventParticipant> Participants => _participants;
 
+        // -- constructors --
+
+        private Event() { }
+
+        public Event
+        (
+            Guid guid,
+            string name,
+            string location,
+            DateTime date,
+            string additionalInfo
+        ) 
+        {
+            Id = guid;
+            Name = name;
+            Location = location;
+            Date = date;
+            AdditionalInfo = additionalInfo;
+        }
+
         // -- uncs --
         public void RegisterParticipant(Guid participantId)
         {

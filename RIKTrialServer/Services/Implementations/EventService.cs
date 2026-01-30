@@ -5,6 +5,8 @@ using RIKTrialServer.Transformers;
 using RIKTrialSharedModels.Domain.Creation;
 using RIKTrialSharedModels.Domain.Returns;
 using RIKTrialSharedModels.Domains.Filters;
+using System.Xml.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace RIKTrialServer.Services.Implementations
 {
@@ -13,23 +15,24 @@ namespace RIKTrialServer.Services.Implementations
         private readonly IEventRepository _eventRepo = repo;
         public async Task<bool> AddEvent(EventCreationDTO data, CancellationToken ctoken)
         {
-            if (data.Date < DateTime.Now) throw new Exception("Saab ainult tuleviku lisada");
-            if (data.AdditionalInfo.Length > 1000) throw new Exception("Liiga palju tähemärke lisainfol");
+            if (data.Date < DateTime.Now) return false;
+            if (data.AdditionalInfo.Length > 1000) return false;
 
-            Event ev = new()
-            {
-                Name = data.Name,
-                Date = data.Date,
-                Location = data.Location,
-                AdditionalInfo = data.AdditionalInfo,
-            };
+            Event ev = new Event
+            (
+                Guid.NewGuid(),
+                data.Name,
+                data.Location,
+                data.Date,
+                data.AdditionalInfo
+            );
 
             return await _eventRepo.AddEvent(ev, ctoken);
         }
 
         public async Task<bool> DeleteEvent(Guid eventId, CancellationToken ctoken)
         {
-            Event? ev = await _eventRepo.GetEventByID(eventId)
+            Event? ev = await _eventRepo.GetEventByID(eventId, ctoken)
                 ?? throw new Exception("Proovite kustutada mitte eksisteerivat üritust");
 
             if (ev.Date < DateTime.Now) throw new Exception("Ei saa kustutada minevikust");
@@ -37,22 +40,22 @@ namespace RIKTrialServer.Services.Implementations
             return await _eventRepo.RemoveEvent(ev, ctoken);
         }
 
-        public async Task<Event?> GetEvent(Guid eventId)
+        public async Task<Event?> GetEvent(Guid eventId, CancellationToken ctoken)
         {
-            return await _eventRepo.GetEventByID(eventId);
+            return await _eventRepo.GetEventByID(eventId, ctoken);
         }
 
-        public async Task<List<EventReturnDTO>> GetEvents(EventFilters filters)
+        public async Task<List<EventReturnDTO>> GetEvents(EventFilters filters, CancellationToken ctoken)
         {
-            List<Event> events = await _eventRepo.GetEvents(filters);
+            List<Event> events = await _eventRepo.GetEvents(filters, ctoken);
 
             return events.Select(ev => EventMapper.MapToEventsResponse(ev, ParticipantCount(ev))).ToList();
         }
 
         public  async Task<bool> RegisterParticipant(Guid id, Guid participantId, CancellationToken ctoken)
         {
-            Event? e = await _eventRepo.GetEventByID(id) ?? throw new Exception("Üritust ei ole olemas");
-            if (e.Date < DateTime.Now) throw new Exception("Ei saa registreerida mineviku");
+            Event? e = await _eventRepo.GetEventByID(id, ctoken) ?? throw new Exception("Üritust ei ole olemas");
+            if (e.Date < DateTime.Now) return false;
             e.RegisterParticipant(participantId);
 
             return await _eventRepo.UpdateEvent(e, ctoken);
@@ -60,8 +63,8 @@ namespace RIKTrialServer.Services.Implementations
 
         public async Task<bool> UnRegisterParticipant(Guid eventId, Guid participantId, CancellationToken ctoken)
         {
-            Event? e = await _eventRepo.GetEventByID(eventId) ?? throw new Exception("Üritust ei ole olemas");
-            if (e.Date < DateTime.Now) throw new Exception("Ei saa muuta mineviku");
+            Event? e = await _eventRepo.GetEventByID(eventId, ctoken) ?? throw new Exception("Üritust ei ole olemas");
+            if (e.Date < DateTime.Now) return false;
             e.UnRegisterParticipant(participantId);
 
             return await _eventRepo.UpdateEvent(e, ctoken);
