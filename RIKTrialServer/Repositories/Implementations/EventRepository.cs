@@ -21,13 +21,13 @@ namespace RIKTrialServer.Repositories.Implementations
             return 0 < await _dbc.SaveChangesAsync(ctoken);
         }
 
-        public async Task<Event?> GetEventByID(Guid id)
+        public async Task<Event?> GetEventByID(Guid id, CancellationToken ctoken)
         {
 
-            return await _dbc.Events.Where(e => e.Id == id).FirstOrDefaultAsync();
+            return await _dbc.Events.FirstOrDefaultAsync(e => e.Id == id, ctoken);
         }
 
-        public async Task<List<Event>> GetEvents(EventFilters filters)
+        public async Task<List<Event>> GetEvents(EventFilters filters, CancellationToken ctoken)
         {
             int skip = (filters.Page - 1) * filters.PageSize;
 
@@ -35,7 +35,7 @@ namespace RIKTrialServer.Repositories.Implementations
                 .OrderBy(e => e.Date)
                 .Skip(skip)
                 .Take(filters.PageSize)
-                .ToListAsync();
+                .ToListAsync(ctoken);
 
             return e;
         }

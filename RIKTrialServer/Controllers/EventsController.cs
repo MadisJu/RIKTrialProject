@@ -14,9 +14,9 @@ namespace RIKTrialServer.Controllers
 
         [HttpGet]
         [Route("events")]
-        public async Task<ActionResult<List<EventReturnDTO>>> GetEvents([FromQuery] EventFilters filters)
+        public async Task<ActionResult<List<EventReturnDTO>>> GetEvents([FromQuery] EventFilters filters, CancellationToken ctoken)
         {
-            return Ok(await _eventService.GetEvents(filters));
+            return Ok(await _eventService.GetEvents(filters, ctoken));
         }
 
         [HttpPost]
