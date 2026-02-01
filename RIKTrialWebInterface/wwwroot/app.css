@@ -37,12 +37,14 @@ body
 
 /* HEADER/NAVBAR STYLIGN */
 
-.Header {
+.Header 
+{
     height: 8vh;
     background-color: lightgray;
     display: flex;
     align-items: center;
     padding: 0 20px;
+    box-shadow: -5px 5px 12px rgba(0, 0, 0, 0.15);
 }
 
 .Header-Left {
@@ -88,7 +90,8 @@ body
 
 /* FOOTER STYLING*/
 
-.Footer {
+.Footer 
+{
     height: 16vh;
     background-color: #444;
     color: white;
@@ -96,6 +99,7 @@ body
     grid-template-columns: repeat(4, 1fr);
     padding: 30px;
     gap: 20px;
+    box-shadow: -5px 5px 12px rgba(0, 0, 0, 0.15);
 }
 
 .Footer-Column {

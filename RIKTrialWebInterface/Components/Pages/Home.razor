@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using RIKTrialWebInterface.Components.Comps
 @inject EventAPIService EventApi
 @inject NavigationManager Nav
 
@@ -34,43 +35,10 @@
                 <div class="Event-List">
                     @foreach (EventReturnDTO ev in _upcomingEvents)
                     {
-                        <NavLink class="Event-Card nav-link"
-                                 href="@($"/events/{ev.Id}")">
-
-                            <div class="Event-CardMain">
-
-                                <div class="Event-CardTitle">
-                                    @ev.Name
-                                </div>
-
-                                <div class="Event-CardMeta">
-                                    @ev.Location •
-                                    @ev.Date.ToString("dd.MM.yyyy") •
-                                    Osalejaid: @ev.ParticipantCount
-                                </div>
-
-                            </div>
-                            <button class="Event-CardAction"
-                                    type="button"
-                                    title="Lisa osaleja"
-                                    @onclick:stopPropagation="true"
-                                    @onclick:preventDefault="true"
-                                    @onclick="(() => NavigateToAddParticipant(ev.Id))">
-
-                                <img src="images/plus-sign.svg" alt="Add Participant" />
-                            </button>
-
-                            <button class="Event-CardAction"
-                                    type="button"
-                                    @onclick:stopPropagation="true"
-                                    @onclick:preventDefault="true"
-                                    @onclick="(() => RemoveEvent(ev.Id))">
-
-                                <img src="images/remove.svg" alt="Action" />
-                            </button>
-
-                        </NavLink>
-
+                        <EventCard Event="ev"
+                                   OnAddParticipant="NavigateToAddParticipant"
+                                   OnRemove="RemoveEvent"
+                                   IsPast=false/>
                     }
                 </div>
             }
@@ -95,23 +63,10 @@
                 <div class="Event-List">
                     @foreach (EventReturnDTO ev in _pastEvents)
                     {
-                        <NavLink class="Event-Card nav-link"
-                                 href="@($"/events/{ev.Id}")">
-
-                            <div class="Event-CardMain">
-
-                                <div class="Event-CardTitle">
-                                    @ev.Name
-                                </div>
-
-                                <div class="Event-CardMeta">
-                                    @ev.Location •
-                                    @ev.Date.ToString("dd.MM.yyyy") •
-                                    Osalejaid: @ev.ParticipantCount
-                                </div>
-
-                            </div>
-                        </NavLink>
+                        <EventCard Event="ev"
+                                   OnAddParticipant="NavigateToAddParticipant"
+                                   OnRemove="RemoveEvent"
+                                   IsPast=true />
                     }
                 </div>
             }

@@ -17,7 +17,7 @@ namespace RIKTrialServer.Repositories.Implementations
 
         public async Task<PaymentMethod?> GetPaymentMethod(int id, CancellationToken ctoken)
         {
-            return await _dbc.PaymentMethods.FirstOrDefaultAsync(e => e.Id == id && !e.Disabled, ctoken);
+            return await _dbc.PaymentMethods.FirstOrDefaultAsync(e => e.Id == id, ctoken);
         }
 
 

@@ -14,6 +14,7 @@ namespace RIKTrialServer.Transformers
             switch (p)
             {
                 case Person person:
+                    ret.Type = ParticipantType.PERSON;
                     ret.Id = person.Id;
                     ret.PaymentMethod = PaymentMethodMapper.MapToPaymentMethodReturn(person.PaymentMethod);
                     ret.IdNumber = person.IdNumber;
@@ -23,10 +24,11 @@ namespace RIKTrialServer.Transformers
                     break;
 
                 case Company comp:
+                    ret.Type = ParticipantType.COMPANY;
                     ret.Id = comp.Id;
                     ret.Name = comp.Name;
                     ret.PaymentMethod = PaymentMethodMapper.MapToPaymentMethodReturn(comp.PaymentMethod);
-                    ret.ComapnyCode = comp.CompanyCode;
+                    ret.CompanyCode = comp.CompanyCode;
                     ret.ParticipantAmount = comp.ParticipantAmount;
                     ret.AdditionalInfo = comp.AdditionalInfo;
                     break;
@@ -42,15 +44,17 @@ namespace RIKTrialServer.Transformers
             switch (p)
             {
                 case Person person:
+                    ret.Type = ParticipantType.PERSON;
                     ret.Id = person.Id;
                     ret.IdNumber = person.IdNumber;
                     ret.FirstName = person.FirstName;
                     ret.LastName = person.LastName;
                     break;
                 case Company comp:
+                    ret.Type = ParticipantType.COMPANY;
                     ret.Id = comp.Id;
                     ret.Name = comp.Name;
-                    ret.ComapnyCode = comp.CompanyCode;
+                    ret.CompanyCode = comp.CompanyCode;
                     ret.ParticipantAmount = comp.ParticipantAmount;
                     break;
             }

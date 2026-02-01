@@ -1,5 +1,6 @@
 ﻿@page "/events/add"
 @using RIKTrialSharedModels.Domain.Creation
+@using RIKTrialWebInterface.Components.Comps
 
 
 @inject EventAPIService EventApi
@@ -7,16 +8,7 @@
 
 <PageTitle>Lisa Üritus</PageTitle>
 
-<div class="Banner">
-
-    <div class="Text-Header Text-Header--Center Banner-Text">
-        <h1>Lisa uus üritus süsteemi</h1>
-    </div>
-
-    <div class="Banner-Image">
-        <img src="images/libled.jpg" alt="Banner" />
-    </div>
-</div>
+<Banner BannerTitle="Ürituse Lisamine"/>
 
 <div class="Form-Body">
 

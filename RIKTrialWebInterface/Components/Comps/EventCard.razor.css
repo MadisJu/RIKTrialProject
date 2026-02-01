@@ -1,0 +1,87 @@
+﻿.Event-Card {
+    display: grid;
+    grid-template-columns: 8fr 1fr 1fr;
+    align-items: center;
+    padding: 4px 4px 4px 4px;
+    margin-top: 2px;
+    background-color:white;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+    box-shadow: -5px 5px 12px rgba(0, 0, 0, 0.05);
+    height: 2.5rem;
+}
+    .Event-Card:hover {
+        border-color: royalblue;
+        border-bottom: 1px solid royalblue;
+        border-radius: 6px;
+        box-shadow: -5px 5px 12px rgba(0, 0, 0, 0.20);
+        transform: translateY(-1px);
+    }
+
+/*
+::deep a.Event-Card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    background: white;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+    margin-left:2px;
+    margin-right:2px;
+    margin-top:2px;
+}
+
+    ::deep a.Event-Card:hover {
+        background: #f2f6ff;
+        border-color: royalblue;
+        box-shadow: -5px 5px 12px rgba(0, 0, 0, 0.20);
+        transform: translateY(-1px);
+    }
+
+*/
+.Event-Card--Main 
+{
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+}
+
+.Event-Card--Title 
+{
+    font-weight: bold;
+    font-size: 1.05rem;
+    margin-bottom: 6px;
+}
+
+.Event-Card--Sub 
+{
+    white-space: nowrap;
+}
+
+.Event-Card--Btn 
+{
+    cursor: pointer;
+    background: transparent;
+    width: 30px;
+    height: 30px;
+    justify-self: end;
+    border: hidden;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+}
+
+    .Event-Card--Btn img 
+    {
+        width: 16px;
+        height: 16px;
+    }
+    .Event-Card--Btn img:hover 
+    {
+        width: 20px;
+        height: 20px;
+    }
+
+
+
+

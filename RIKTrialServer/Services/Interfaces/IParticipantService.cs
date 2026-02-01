@@ -1,6 +1,7 @@
 ﻿using RIKTrialServer.Domains.Models;
 using RIKTrialSharedModels.Domain.Creation;
 using RIKTrialSharedModels.Domain.Returns;
+using RIKTrialSharedModels.Domain.Updates;
 
 namespace RIKTrialServer.Services.Interfaces
 {
@@ -12,7 +13,7 @@ namespace RIKTrialServer.Services.Interfaces
         public Task<List<ParticipantLightReturnDTO>> GetEventParticipants(Guid eventId, CancellationToken ctoken);
         public Task<Guid?> CreateParticipant(ParticipantCreationDTO data,  CancellationToken ctoken);
 
-        public Task<bool> UpdateParticipant(ParticipantCreationDTO data, Guid id, CancellationToken ctoken);
+        public Task<bool> UpdateParticipant(ParticipantUpdateDTO data, Guid id, CancellationToken ctoken);
 
         public Task<bool> DeleteParticipant(Guid id, CancellationToken ctoken);
 

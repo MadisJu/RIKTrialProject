@@ -1,0 +1,51 @@
+﻿@using RIKTrialSharedModels.Domain.Returns
+@using RIKTrialSharedModels.Domain.Types
+
+<div class="Participant-Card" @onclick="GoToEdit">
+
+    @if (Participant.Type == ParticipantType.PERSON)
+    {
+        <div class="Participant-Card--Main">
+            <span class="Participant-Card--Title ">
+                @Participant.FirstName @Participant.LastName
+            </span>
+
+            <span class="Participant-Card--Sub">
+                @Participant.IdNumber
+            </span>
+        </div>
+    }
+    else
+    {
+        <div class="Participant-Card--Main">
+            <span class="Participant-Card--Title">
+                @Participant.Name
+            </span>
+
+            <span class="Participant-Card--Sub">
+                @Participant.CompanyCode
+                @if (Participant.ParticipantAmount is not null)
+                {
+                    <span class="Participant-Card--Sub">
+                        (@Participant.ParticipantAmount osalejat)
+                    </span>
+                }
+            </span>
+        </div>
+    }
+
+</div>
+
+@code {
+
+    [Parameter]
+    public ParticipantLightReturnDTO Participant { get; set; } = null!;
+
+    [Inject]
+    private NavigationManager Nav { get; set; } = null!;
+
+    private void GoToEdit()
+    {
+        Nav.NavigateTo($"/participants/{Participant.Id}");
+    }
+}

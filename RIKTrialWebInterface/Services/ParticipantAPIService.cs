@@ -1,5 +1,7 @@
 ﻿using System.Net.Http.Json;
 using RIKTrialSharedModels.Domain.Creation;
+using RIKTrialSharedModels.Domain.Returns;
+using RIKTrialSharedModels.Domain.Updates;
 
 namespace RIKTrialWebInterface.Services
 {
@@ -26,6 +28,50 @@ namespace RIKTrialWebInterface.Services
             Guid id = await response.Content.ReadFromJsonAsync<Guid>(ctoken);
 
             return id;
+        }
+
+        public async Task<ParticipantReturnDTO?> GetParticipant
+            (
+                Guid id,
+                CancellationToken ctoken = default
+            )
+        {
+            return await _http.GetFromJsonAsync<ParticipantReturnDTO>
+                (
+                    $"api/Participant/participant?userId={id}",
+                    ctoken
+                ) ?? null;
+        }
+
+        public async Task<List<ParticipantReturnDTO>> GetAllParticipants
+            (
+                CancellationToken ctoken = default
+            )
+        {
+            return await _http.GetFromJsonAsync<List<ParticipantReturnDTO>>
+                (
+                    $"api/Participant/allparticipants",
+                    ctoken
+                ) ?? throw new Exception("Osavõtjate fetchimine failis.");
+        }
+
+        public async Task<bool> UpdateParticipant
+            (
+                Guid id,
+                ParticipantUpdateDTO dto,
+                CancellationToken ctoken = default
+            )
+        {
+            HttpResponseMessage response = await _http.PutAsJsonAsync
+                (
+                    $"api/Participant/participant?id={id}",
+                    dto,
+                    ctoken
+                );
+
+            response.EnsureSuccessStatusCode();
+
+            return true; 
         }
     }
 }

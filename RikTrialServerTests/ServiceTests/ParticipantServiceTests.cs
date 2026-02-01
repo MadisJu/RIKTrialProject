@@ -29,9 +29,9 @@ namespace RikTrialServerTests.ServiceTests
                 ParticipantAmount = 67
             };
 
-            bool result = await service.CreateParticipant(dto, CancellationToken.None);
+            Guid? result = await service.CreateParticipant(dto, CancellationToken.None);
 
-            Assert.False(result);
+            Assert.Null(result);
 
             mock.Verify
                 (
@@ -57,9 +57,9 @@ namespace RikTrialServerTests.ServiceTests
                 LastName = "CoolPerson"
             };
 
-            bool result = await service.CreateParticipant(dto, CancellationToken.None);
+            Guid? result = await service.CreateParticipant(dto, CancellationToken.None);
 
-            Assert.False(result);
+            Assert.Null(result);
 
             mock.Verify
                 (
@@ -88,9 +88,9 @@ namespace RikTrialServerTests.ServiceTests
                 LastName = "Tamberg"
             };
 
-            bool result = await service.CreateParticipant(dto, CancellationToken.None);
+            Guid? result = await service.CreateParticipant(dto, CancellationToken.None);
 
-            Assert.True(result);
+            Assert.NotNull(result);
 
             mock.Verify
                 (
@@ -115,13 +115,13 @@ namespace RikTrialServerTests.ServiceTests
                 PaymentMethodId = 1,
                 Name = "Madislolinc",
                 ComapnyCode = "123456782",
-                AdditionalInfo = "Best coders in town",
+                AdditionalInfo = "Best coders in town, me and my split personality",
                 ParticipantAmount = 2
             };
 
-            bool result = await service.CreateParticipant(dto, CancellationToken.None);
+            Guid? result = await service.CreateParticipant(dto, CancellationToken.None);
 
-            Assert.True(result);
+            Assert.NotNull(result);
 
             mock.Verify
                 (

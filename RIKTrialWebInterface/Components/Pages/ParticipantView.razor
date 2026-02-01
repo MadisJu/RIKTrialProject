@@ -1,5 +1,159 @@
-﻿<h3>ParticipantView</h3>
+﻿@page "/participants/{ParticipantId:guid}"
+@using RIKTrialSharedModels.Domain.Updates
+@using RIKTrialSharedModels.Domain.Types;
+@using RIKTrialSharedModels.Transformers
 
-@code {
+@inject ParticipantAPIService ParticipantApi
+@inject PaymentMethodAPIService PaymentApi
 
+<PageTitle>Osaleja ülevaade</PageTitle>
+
+<div>
+    @if (_participant == null || _patchData == null)
+    {
+        <p>Loading...</p>
+    }
+    else if(_participant.Type == ParticipantType.PERSON)
+    {
+        <EditForm Model="_patchData" OnValidSubmit="Save">
+            <DataAnnotationsValidator />
+
+            <label>First Name</label>
+            <InputText class="form-control"
+                       @bind-Value="_patchData.FirstName" />
+
+            <label>Last Name</label>
+            <InputText class="form-control"
+                       @bind-Value="_patchData.LastName" />
+
+            <label>Additional Info</label>
+            <InputText class="form-control"
+                       @bind-Value="_patchData.AdditionalInfo" />
+    
+            <InputSelect class="form-control"
+                         @bind-Value="_patchData.PaymentMethodId">
+
+                <option value="">-- Select payment method --</option>
+
+                @foreach (PaymentMethodReturnDTO method in _methods)
+                {
+                    <option value="@method.Id">
+                        @method.PaymentMethod
+                    </option>
+                }
+            </InputSelect>
+
+            <button class="btn btn-primary mt-3">
+                Save Changes
+            </button>
+        </EditForm>
+
+        <p>Updated : @_participant.Type</p>
+    }
+    else if(_participant.Type == ParticipantType.COMPANY)
+    {
+        <EditForm Model="_patchData" OnValidSubmit="Save">
+            <DataAnnotationsValidator />
+
+            <label>Name</label>
+            <InputText class="form-control"
+                       @bind-Value="_patchData.Name" />
+
+            <label>Company Code</label>
+            <InputText class="form-control"
+                       @bind-Value="_patchData.CompanyCode" />
+
+            <label>Participant Amount</label>
+            <InputNumber class="form-control" TValue="int?"
+                 @bind-Value="_patchData.ParticipantAmount" />
+
+            <label>Additional Info</label>
+            <InputText class="form-control"
+                       @bind-Value="_patchData.AdditionalInfo" />
+
+            <InputSelect class="form-control"
+                         @bind-Value="_patchData.PaymentMethodId">
+
+                <option value="">-- Select payment method --</option>
+
+                @foreach (PaymentMethodReturnDTO method in _methods)
+                {
+                    <option value="@method.Id">
+                        @method.PaymentMethod
+                    </option>
+                }
+            </InputSelect>
+
+            <button class="btn btn-primary mt-3">
+                Save Changes
+            </button>
+        </EditForm>
+
+        <p>Updated : @_participant.Type</p>
+    }
+
+    <p>Updated : @updated.ToString()</p>
+    
+</div>
+
+@code 
+{
+    [Parameter]
+    public Guid ParticipantId { get; set; }
+
+    private bool loading = true;
+
+    private ParticipantReturnDTO? _participant;
+
+    private ParticipantUpdateDTO _patchData = new();
+
+    private List<PaymentMethodReturnDTO> _methods = new();
+
+    private bool updated = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _participant = await ParticipantApi.GetParticipant(ParticipantId);
+
+        _methods = await PaymentApi.GetPaymentMethods();
+
+        if (_participant != null)
+        {
+            _patchData = ParticipantDTOMapper.MapParticipantDataToCreationDTO(_participant);
+        }
+    }
+
+    private async void Save()
+    {
+
+        if(_participant != null)
+        {
+            if (_patchData.PaymentMethodId == _participant.PaymentMethod.Id)
+                _patchData.PaymentMethodId = null;
+
+            if (_patchData.AdditionalInfo == _participant.AdditionalInfo)
+                _patchData.AdditionalInfo = null;
+
+            if (_patchData.FirstName == _participant.FirstName)
+                _patchData.FirstName = null;
+
+            if (_patchData.LastName == _participant.LastName)
+                _patchData.LastName = null;
+            /*
+            if (_patchData.IdNumber == _participant.IdNumber)
+                _patchData.IdNumber = null;
+            */
+            if (_patchData.Name == _participant.Name)
+                _patchData.Name = null;
+
+            if (_patchData.CompanyCode == _participant.CompanyCode)
+                _patchData.CompanyCode = null;
+
+            if (_patchData.ParticipantAmount == _participant.ParticipantAmount)
+                _patchData.ParticipantAmount = null;
+
+            updated = await ParticipantApi.UpdateParticipant(ParticipantId, _patchData);
+        }
+        
+    }
 }

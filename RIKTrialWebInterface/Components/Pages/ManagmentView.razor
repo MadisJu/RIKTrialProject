@@ -1,5 +1,75 @@
-﻿<h3>ManagmentView</h3>
+﻿@page "/management"
 
-@code {
+@using RIKTrialWebInterface.Components.Comps
 
+@inject ParticipantAPIService ParticipantApi
+@inject PaymentMethodAPIService PaymentAPI
+
+<Banner BannerTitle="Management Tab"/>
+
+<div class="Management-Tabs">
+
+    <div class="Management-Tab @(participantView ? "active" : "")"
+         @onclick="() => participantView = true">
+        Osalejad
+    </div>
+
+    <div class="Management-Tab @(!participantView ? "active" : "")"
+         @onclick="() => participantView = false">
+        Makseviisid
+    </div>
+
+</div>
+
+<div class="Management-Content">
+
+    @if (participantView)
+    {
+        <div class="Participant-List">
+            @foreach (ParticipantReturnDTO p in _participants)
+            {
+                <ParticipantCard Participant="p" />
+            }
+        </div>
+    }
+    else
+    {
+        <div class="PaymentMethod-List">
+            @foreach (PaymentMethodReturnDTO m in _paymentMethods)
+            {
+                <PaymentMethodCard Method="m"
+                                   MethodToggle="ToggleMethod" />
+            }
+        </div>
+    }
+
+</div>
+
+
+
+@code 
+{
+    private bool participantView = true;
+
+    private List<ParticipantReturnDTO> _participants = new();
+
+    private List<PaymentMethodReturnDTO> _paymentMethods = new();
+
+    protected async override Task OnInitializedAsync()
+    {
+        _participants = await ParticipantApi.GetAllParticipants();
+        _paymentMethods = await PaymentAPI.GetAllPaymentMethods();
+    }
+
+    private async Task ToggleMethod(int methodId)
+    {
+        bool success =
+            await PaymentAPI.TogglePaymentMethod(methodId);
+
+        if (!success)
+            return;
+
+        _paymentMethods =
+            await PaymentAPI.GetAllPaymentMethods();
+    }
 }

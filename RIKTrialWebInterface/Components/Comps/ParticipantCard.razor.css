@@ -1,0 +1,56 @@
+﻿.Participant-Card 
+{
+    display: grid;
+    grid-template-columns: 8fr 1fr 1fr;
+    align-items: center;
+    padding: 4px 4px 4px 4px;
+    margin-top: 2px;
+    background-color: white;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+    box-shadow: -5px 5px 12px rgba(0, 0, 0, 0.05);
+    height: 2.5rem;
+}
+
+    .Participant-Card:hover {
+        border-color: royalblue;
+        border-bottom: 1px solid royalblue;
+        border-radius: 6px;
+        box-shadow: -5px 5px 12px rgba(0, 0, 0, 0.20);
+        transform: translateY(-1px);
+    }
+
+.Participant-Card--Main {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 2fr;
+}
+
+.Participant-Card--Title {
+    font-weight: bold;
+    font-size: 1.05rem;
+    margin-bottom: 6px;
+}
+
+.Participant-Card--Sub 
+{
+    white-space: nowrap;
+}
+
+.Participant-Card--Btn {
+    cursor: pointer;
+    background: transparent;
+    width: 30px;
+    height: 30px;
+    justify-self: end;
+    border: hidden;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+}
+
+    .Participant-Card--Btn img {
+        width: 16px;
+        height: 16px;
+    }
+
+        .Participant-Card--Btn img:hover {
+            width: 20px;
+            height: 20px;
+        }

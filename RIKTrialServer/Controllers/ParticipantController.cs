@@ -2,6 +2,7 @@
 using RIKTrialServer.Services.Interfaces;
 using RIKTrialSharedModels.Domain.Creation;
 using RIKTrialSharedModels.Domain.Returns;
+using RIKTrialSharedModels.Domain.Updates;
 
 namespace RIKTrialServer.Controllers
 {
@@ -41,7 +42,7 @@ namespace RIKTrialServer.Controllers
 
         [HttpPut]
         [Route("participant")]
-        public async Task<ActionResult<bool>> UpdateParticipant([FromBody] ParticipantCreationDTO data, [FromQuery] Guid id, CancellationToken ctoken)
+        public async Task<ActionResult<bool>> UpdateParticipant([FromBody] ParticipantUpdateDTO data, [FromQuery] Guid id, CancellationToken ctoken)
         {
             try
             {

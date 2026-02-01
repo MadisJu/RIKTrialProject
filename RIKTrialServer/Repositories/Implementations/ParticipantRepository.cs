@@ -26,12 +26,14 @@ namespace RIKTrialServer.Repositories.Implementations
         public async Task<Participant?> GetParticipant(Guid id, CancellationToken ctoken)
         {
             return await _dbc.Participants
+                .Include(p => p.PaymentMethod)
                 .FirstOrDefaultAsync(p => p.Id == id, ctoken);
         }
 
         public Task<List<Participant>> GetParticipants(CancellationToken ctoken)
         {
             return _dbc.Participants
+                .Include(p => p.PaymentMethod)
                 .ToListAsync(ctoken);
         }
 

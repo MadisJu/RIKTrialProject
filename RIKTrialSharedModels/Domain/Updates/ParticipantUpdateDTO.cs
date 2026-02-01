@@ -1,12 +1,11 @@
 ﻿using RIKTrialSharedModels.Domain.Types;
 
-namespace RIKTrialSharedModels.Domain.Returns
+namespace RIKTrialSharedModels.Domain.Updates
 {
-    public class ParticipantReturnDTO
+    public class ParticipantUpdateDTO
     {
         public ParticipantType Type { get; set; }
-        public Guid Id { get; set; }
-        public PaymentMethodReturnDTO PaymentMethod { get; set; } = null!;
+        public int? PaymentMethodId { get; set; }
         public string? AdditionalInfo { get; set; }
 
         // For person type participant
@@ -19,6 +18,5 @@ namespace RIKTrialSharedModels.Domain.Returns
         public string? Name { get; set; }
         public string? CompanyCode { get; set; }
         public int? ParticipantAmount { get; set; }
-
     }
 }

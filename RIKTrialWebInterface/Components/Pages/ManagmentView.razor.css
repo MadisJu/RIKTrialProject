@@ -1,0 +1,18 @@
+﻿.Management-Tabs
+{
+    height: 5vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.Management-Tab
+{
+    background-color:white;
+    justify-content: center;
+    align-content: center;
+}
+
+.Management-Tab:hover
+{
+    background-color:royalblue;
+}
