@@ -1,6 +1,9 @@
 .Type-Selector {
     display: flex;
     gap: 20px;
+    align-items: center;
+    flex-wrap: nowrap;
+    white-space: nowrap;
 }
 
 .Type-Option {
@@ -8,4 +11,9 @@
     align-items: center;
     gap: 8px;
     font-weight: 600;
+    white-space: nowrap;
+}
+
+.Type-Selector .Type-Option {
+    display: inline-flex;
 }

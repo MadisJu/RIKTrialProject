@@ -16,84 +16,64 @@
     {
         <p>Loading...</p>
     }
-    else if(_participant.Type == ParticipantType.PERSON)
+    else
     {
         <div class="Form-Card">
+            <h2>Muuda osalejat</h2>
+
             <EditForm Model="_patchData" OnValidSubmit="Save">
                 <DataAnnotationsValidator />
+                <ValidationSummary />
 
-                <label>First Name</label>
-                <InputText class="Form-Row"
-                           @bind-Value="_patchData.FirstName" />
+                @if (_participant.Type == ParticipantType.PERSON)
+                {
+                    <div class="Form-Row">
+                        <label>Eesnimi</label>
+                        <InputText class="form-input" @bind-Value="_patchData.FirstName" />
+                    </div>
 
-                <label>Last Name</label>
-                <InputText class="Form-Row"
-                           @bind-Value="_patchData.LastName" />
+                    <div class="Form-Row">
+                        <label>Perekonnanimi</label>
+                        <InputText class="form-input" @bind-Value="_patchData.LastName" />
+                    </div>
+                }
+                else if (_participant.Type == ParticipantType.COMPANY)
+                {
+                    <div class="Form-Row">
+                        <label>Ettevõtte nimi</label>
+                        <InputText class="form-input" @bind-Value="_patchData.Name" />
+                    </div>
 
-                <label>Additional Info</label>
-                <InputText class="Form-Row"
-                           @bind-Value="_patchData.AdditionalInfo" />
+                    <div class="Form-Row">
+                        <label>Registrikood</label>
+                        <InputText class="form-input" @bind-Value="_patchData.CompanyCode" />
+                    </div>
 
-                <InputSelect class="Form-Row"
-                             @bind-Value="_patchData.PaymentMethodId">
+                    <div class="Form-Row">
+                        <label>Osalejate arv</label>
+                        <InputNumber class="form-input" TValue="int?" @bind-Value="_patchData.ParticipantAmount" />
+                    </div>
+                }
 
-                    <option value="">-- Select payment method --</option>
+                <div class="Form-Row">
+                    <label>Lisainfo</label>
+                    <InputTextArea class="form-input form-textarea" @bind-Value="_patchData.AdditionalInfo" />
+                </div>
 
-                    @foreach (PaymentMethodReturnDTO method in _methods)
-                    {
-                        <option value="@method.Id">
-                            @method.PaymentMethod
-                        </option>
-                    }
-                </InputSelect>
+                <div class="Form-Row">
+                    <label>Makseviis</label>
+                    <InputSelect class="form-input" @bind-Value="_patchData.PaymentMethodId">
+                        <option value="">-- Vali makseviis --</option>
+                        @foreach (PaymentMethodReturnDTO method in _methods)
+                        {
+                            <option value="@method.Id">@method.PaymentMethod</option>
+                        }
+                    </InputSelect>
+                </div>
 
-                <button class="btn btn-primary mt-3">
-                    Save Changes
-                </button>
-            </EditForm>
-        </div>
-        
-
-        <p>Updated : @_participant.Type</p>
-    }
-    else if(_participant.Type == ParticipantType.COMPANY)
-    {
-        <div class="Form-Card">
-            <EditForm Model="_patchData" OnValidSubmit="Save">
-                <DataAnnotationsValidator />
-
-                <label>Name</label>
-                <InputText class="Form-Row"
-                           @bind-Value="_patchData.Name" />
-
-                <label>Company Code</label>
-                <InputText class="Form-Row"
-                           @bind-Value="_patchData.CompanyCode" />
-
-                <label>Participant Amount</label>
-                <InputNumber class="Form-Row" TValue="int?"
-                     @bind-Value="_patchData.ParticipantAmount" />
-
-                <label>Additional Info</label>
-                <InputText class="Form-Row"
-                           @bind-Value="_patchData.AdditionalInfo" />
-
-                <InputSelect class="Form-Row"
-                             @bind-Value="_patchData.PaymentMethodId">
-
-                    <option value="">-- Select payment method --</option>
-
-                    @foreach (PaymentMethodReturnDTO method in _methods)
-                    {
-                        <option value="@method.Id">
-                            @method.PaymentMethod
-                        </option>
-                    }
-                </InputSelect>
-
-                <button class="btn btn-primary mt-3">
-                    Save Changes
-                </button>
+                <div class="form-actions">
+                    <button class="btn btn--primary" type="submit">Salvesta</button>
+                </div>
             </EditForm>
         </div>
     }

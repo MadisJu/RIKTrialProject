@@ -2,12 +2,16 @@
 
 @using RIKTrialSharedModels.Domain.Creation
 @using RIKTrialSharedModels.Domain.Types
+@using RIKTrialSharedModels.Domain.Validation
+@using Microsoft.AspNetCore.Components.Forms
 @rendermode InteractiveServer
 
 @inject ParticipantAPIService ParticipantApi
 @inject PaymentMethodAPIService PaymentApi
 @inject EventAPIService EventApi
 @inject NavigationManager Nav
+
+@implements IDisposable
 
 <PageTitle>Lisa Osaleja</PageTitle>
 
@@ -26,7 +30,7 @@
 
         <h2>Osaleja Andmed</h2>
 
-        <EditForm Model="@_model"
+        <EditForm EditContext="_editContext"
                   OnValidSubmit="SubmitParticipant"
                   OnInvalidSubmit="InvalidSubmit">
 
@@ -37,14 +41,15 @@
 
                 <InputRadioGroup @bind-Value="_model.Type"
                                  TValue="ParticipantType"
-                                 Name="ParticipantType">
+                                 Name="ParticipantType"
+                                 class="Type-Selector">
 
-                    <label>
+                    <label class="Type-Option">
                         <InputRadio Value="ParticipantType.PERSON" />
                         Eraisik
                     </label>
 
-                    <label>
+                    <label class="Type-Option">
                         <InputRadio Value="ParticipantType.COMPANY" />
                         Ettevõte
                     </label>
@@ -134,11 +139,18 @@
     public Guid EventId { get; set; }
 
     private ParticipantCreationDTO _model = new();
+    private EditContext _editContext = default!;
+    private ValidationMessageStore? _validationMessages;
 
     private List<PaymentMethodReturnDTO> _paymentMethods = new();
 
     protected override async Task OnInitializedAsync()
     {
+        _editContext = new EditContext(_model);
+        _validationMessages = new ValidationMessageStore(_editContext);
+        _editContext.OnValidationRequested += OnValidateRequested;
+        _editContext.OnFieldChanged += OnFieldChanged;
+
         _model.Type = ParticipantType.PERSON;
 
         _paymentMethods = await PaymentApi.GetPaymentMethods();
@@ -154,6 +166,10 @@
 
     private async Task SubmitParticipant()
     {
+        RunIdValidation();
+        if (!_editContext.Validate())
+            return;
+
         Console.WriteLine("===== SUBMIT =====");
         Console.WriteLine($"Type = {_model.Type}");
 
@@ -178,5 +194,38 @@
     private void NavigateBack()
     {
         Nav.NavigateTo($"/events/{EventId}");
+    }
+
+    private void OnValidateRequested(object? sender, ValidationRequestedEventArgs e) => RunIdValidation();
+
+    private void OnFieldChanged(object? sender, FieldChangedEventArgs e)
+    {
+        if (e.FieldIdentifier.FieldName is nameof(_model.IdNumber) or nameof(_model.Type))
+            RunIdValidation();
+    }
+
+    private void RunIdValidation()
+    {
+        _validationMessages?.Clear();
+
+        if (_model.Type == ParticipantType.PERSON)
+        {
+            var field = new FieldIdentifier(_model, nameof(_model.IdNumber));
+            if (string.IsNullOrWhiteSpace(_model.IdNumber) || !IdCodeValidation.ValidEstonianId(_model.IdNumber))
+            {
+                _validationMessages?.Add(field, "Kehtetu isikukood.");
+            }
+        }
+
+        _editContext.NotifyValidationStateChanged();
+    }
+
+    public void Dispose()
+    {
+        if (_editContext != null)
+        {
+            _editContext.OnValidationRequested -= OnValidateRequested;
+            _editContext.OnFieldChanged -= OnFieldChanged;
+        }
     }
 }

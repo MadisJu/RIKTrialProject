@@ -83,7 +83,7 @@ namespace RikTrialServerTests.ServiceTests
                 Type = ParticipantType.PERSON,
                 PaymentMethodId = 1,
                 FirstName = "Madis",
-                IdNumber = "12345678901",
+                IdNumber = "50211011514",
                 AdditionalInfo = "Allergic to python",
                 LastName = "Tamberg"
             };

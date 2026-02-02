@@ -35,7 +35,7 @@
         {
             <button class="Participant-Card--Btn"
                     type="button"
-                    title="Kustuta Osaleja"
+                    title="@ToolTipString"
                     @onclick:stopPropagation="true"
                     @onclick:preventDefault="true"
                     @onclick="FireAction">
@@ -81,7 +81,7 @@
         {
             <button class="Participant-Card--Btn"
                     type="button"
-                    title="Kustuta Osaleja"
+                    title="@ToolTipString"
                     @onclick:stopPropagation="true"
                     @onclick:preventDefault="true"
                     @onclick="FireAction">
@@ -105,6 +105,9 @@
 
     [Parameter]
     public bool IsLight { get; set; } = false;
+
+    [Parameter]
+    public string ToolTipString { get; set; } = "";
 
     [Inject]
     private NavigationManager Nav { get; set; } = null!;

@@ -1,8 +1,8 @@
-﻿.Paging-Bar {
+.Paging-Bar {
     display: flex;
     align-content: center;
     justify-content: center;
     background-color: var(--background-color);
     gap: 16px;
+    padding: 12px 0 16px;
 }
-

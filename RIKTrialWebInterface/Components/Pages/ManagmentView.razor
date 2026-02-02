@@ -1,7 +1,9 @@
 ﻿@page "/management"
 
+@using RIKTrialSharedModels.Domain.Creation
 @using RIKTrialSharedModels.Domain.Filters
 @using RIKTrialWebInterface.Components.Comps
+@using Microsoft.AspNetCore.Components.Forms
 
 @inject ParticipantAPIService ParticipantApi
 @inject PaymentMethodAPIService PaymentAPI
@@ -68,6 +70,26 @@
     }
     else
     {
+        <div class="Payment-Header">
+            <div class="Payment-Header--Title">
+                Makseviisi lisamine
+            </div>
+
+            <EditForm Model="_paymentMethodForm"
+                      OnValidSubmit="CreatePaymentMethod">
+                <div class="Payment-Header--Row">
+                    <label for="paymentName">Nimi</label>
+                    <InputText id="paymentName"
+                               class="form-input"
+                               @bind-Value="_paymentMethodForm.Name" />
+                    <button class="Btn Btn--Primary Btn--Primary--Small"
+                            type="submit">
+                        Lisa
+                    </button>
+                </div>
+            </EditForm>
+        </div>
+
         <div class="PaymentMethod-List">
             @foreach (PaymentMethodReturnDTO m in _paymentMethods)
             {
@@ -93,6 +115,8 @@
     private int _participantPage = 1;
 
     private const int PageSize = 10;
+
+    private PaymentMethodCreationDTO _paymentMethodForm = new();
 
     protected async override Task OnInitializedAsync()
     {
@@ -146,5 +170,15 @@
 
         _participants = await ParticipantApi.GetAllParticipants(filters);
         StateHasChanged();
+    }
+
+    private async Task CreatePaymentMethod()
+    {
+        if (string.IsNullOrWhiteSpace(_paymentMethodForm.Name))
+            return;
+
+        await PaymentAPI.CreatePaymentMethod(new PaymentMethodCreationDTO { Name = _paymentMethodForm.Name });
+        _paymentMethods = await PaymentAPI.GetAllPaymentMethods();
+        _paymentMethodForm = new();
     }
 }

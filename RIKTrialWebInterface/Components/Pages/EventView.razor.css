@@ -50,8 +50,10 @@
 .form-actions {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    gap: 12px;
     margin-top: auto;
-    height: 1.5rem;
+    flex-wrap: wrap;
 }
 
 .Participant-List-Action {

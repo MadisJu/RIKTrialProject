@@ -7,6 +7,7 @@ using RIKTrialSharedModels.Domain.Filters;
 using RIKTrialSharedModels.Domain.Returns;
 using RIKTrialSharedModels.Domain.Types;
 using RIKTrialSharedModels.Domain.Updates;
+using RIKTrialSharedModels.Domain.Validation;
 using System;
 
 namespace RIKTrialServer.Services.Implementations
@@ -26,7 +27,7 @@ namespace RIKTrialServer.Services.Implementations
 
                     if (data.FirstName == null) return null;
                     if (data.LastName == null) return null;
-                    if (data.IdNumber == null) return null;
+                    if (data.IdNumber == null || !IdCodeValidation.ValidEstonianId(data.IdNumber)) return null;
 
                     p = new Person
                         (
