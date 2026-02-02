@@ -4,9 +4,6 @@ using RIKTrialServer.Repositories.Implementations;
 using RIKTrialServer.Repositories.Interfaces;
 using RIKTrialServer.Services.Implementations;
 using RIKTrialServer.Services.Interfaces;
-using System;
-
-using Swashbuckle.AspNetCore.SwaggerGen;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,13 +46,11 @@ using (IServiceScope scope = app.Services.CreateScope())
 
 app.MapControllers();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
-app.UseCors("BlazorPolicy");
+
+app.UseCors("FrontendPolicy");
 
 /*app.MapGet("/", () => "Hello World!");*/
 

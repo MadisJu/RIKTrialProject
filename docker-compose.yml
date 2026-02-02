@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: RIKTrialServer/Dockerfile
+    environment:
+      APP_UID: "1000"                      
+      ASPNETCORE_HTTP_PORTS: 8080
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__Default: Data Source=/app/data/riktrial.db
+    ports:
+      - "5005:8080"                       
+    volumes:
+      - server_data:/data                 
+
+  web:
+    build:
+      context: .
+      dockerfile: RIKTrialWebInterface/Dockerfile
+    environment:
+      APP_UID: "1000"
+      ASPNETCORE_HTTP_PORTS: 7000
+      ASPNETCORE_ENVIRONMENT: Development
+      ApiBaseAddress: http://api:8080/api 
+    depends_on:
+      - api
+    ports:
+      - "7000:7000"
+
+volumes:
+  server_data: {}
