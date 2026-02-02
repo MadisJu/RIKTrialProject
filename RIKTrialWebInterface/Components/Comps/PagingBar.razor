@@ -1,17 +1,17 @@
 ﻿<div class="Paging-Bar">
 
-    <button class="Paging-Btn"
+    <button class="Btn Btn--Primary Btn--Primary--Small"
             disabled="@(Page <= 1)"
             @onclick="PrevClicked">
-        ◀ Prev
+        &larr;
     </button>
 
-    <span>Page @Page</span>
+    <span>Lk: @Page</span>
 
-    <button class="Paging-Btn"
+    <button class="Btn Btn--Primary Btn--Primary--Small"
             disabled="@(CurrentCount < PageSize)"
             @onclick="NextClicked">
-        Next ▶
+        &rarr;
     </button>
 
 </div>

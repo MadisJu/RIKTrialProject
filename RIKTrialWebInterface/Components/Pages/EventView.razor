@@ -12,13 +12,16 @@
 
 <PageTitle>Ürituse Vaade</PageTitle>
 
+<div class="Content">
 @if (_event == null)
 {
     <p>Loading...</p>
 }
 else
 {
-    <Banner BannerTitle="Üritus"/>
+
+
+    <Banner BannerTitle="Üritus" />
 
     <div class="Event-View--Body">
         <div class="Form-Body">
@@ -62,60 +65,66 @@ else
                         @foreach (ParticipantLightReturnDTO p in _event.Participants)
                         {
                             <ParticipantCardLight Participant="p"
-                                                  RemoveParticipantEvent="RemoveParticipant" />
+                                                    RemoveParticipantEvent="RemoveParticipant" />
                         }
                     </div>
                 }
 
                 <div class="form-actions">
-                    <button class="btn btn--secondary"
+                    <button class="Btn Btn--Secondary"
                             @onclick="NavigateBack">
                         Tagasi
                     </button>
+
+                    <PagingBar Page="_participantViewPage"
+                                PageSize="ParticipantViewPage"
+                                CurrentCount="_event.Participants.Count"
+                                OnNext="NextView"
+                                OnPrev="PrevView" />
                 </div>
 
-                <PagingBar
-                    Page="_participantViewPage"
-                    PageSize="ParticipantViewPage"
-                    CurrentCount="_event.Participants.Count"
-                    OnNext="NextView"
-                    OnPrev="PrevView"
-                    />
+                
 
             </div>
         </div>
-        <div>
-            <div>
-                Lisa olemasolevaid
+        <div class="Participant-List-Menu">
+            <div class="Title-Box Text-Header Text-Header--Center">
+                Lisa süsteemis olevaid osalejaid
             </div>
-            
+
             <div class="Participant-List">
                 @foreach (ParticipantReturnDTO p in _participants)
                 {
                     <ParticipantCard Participant="p"
-                                          ActionEnabled="@(!ExsistsInList(p.Id))"
-                                          ActionEvent="AddParticipant"
-                                          />
+                                        ActionEnabled="@(!ExsistsInList(p.Id))"
+                                        ActionEvent="AddParticipant"
+                                        IsLight="true"
+                                        />
                 }
+
+                <div class="Participant-List-Action">
+                <PagingBar Page="_participantAddPage"
+                            PageSize="ParticipantAddPage"
+                            CurrentCount="_participants.Count"
+                            OnNext="NextAdd"
+                            OnPrev="PrevAdd" />
+                </div>
             </div>
 
-            <PagingBar Page="_participantAddPage"
-                       PageSize="ParticipantAddPage"
-                       CurrentCount="_participants.Count"
-                       OnNext="NextAdd"
-                       OnPrev="PrevAdd" />
-
+            
         </div>
     </div>
-    
+  
 }
-
+</div>
 @code
 {
     [Parameter]
     public Guid EventId { get; set; }
 
     private EventDetailedReturnDTO? _event;
+
+    private List<ParticipantLightReturnDTO> _eventParticipants;
 
     private List<ParticipantReturnDTO> _participants = new();
 
@@ -127,7 +136,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        _event = await EventApi.GetEvent(EventId); // Actually this loads in the whole participants, at first i intended it to be like this, but ill leave it in for now. Otherwise this would be changed.
+         // Actually this loads in the whole participants, at first i intended it to be like this, but ill leave it in for now. Otherwise this would be changed.
         await LoadEventParticipants();
 
         await LoadParticipants();
@@ -156,6 +165,9 @@ else
 
     private async Task LoadEventParticipants()
     {
+
+        _event = await EventApi.GetEvent(EventId);
+        _eventParticipants = _event.Participants;
         ParticipantFilters filters = new()
             {
                 Page = _participantViewPage,
@@ -179,7 +191,7 @@ else
 
     private bool ExsistsInList(Guid id)
     {
-        return _event?.Participants.Any(p => p.Id == id) ?? false;
+        return _eventParticipants.Any(p => p.Id == id);
     }
 
     private async Task NextView()

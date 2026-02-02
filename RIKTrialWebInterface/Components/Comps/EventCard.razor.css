@@ -16,7 +16,6 @@
         box-shadow: -5px 5px 12px rgba(0, 0, 0, 0.20);
         transform: translateY(-1px);
     }
-
 /*
 ::deep a.Event-Card {
     display: flex;
@@ -45,7 +44,7 @@
 .Event-Card--Main 
 {
     display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 
 .Event-Card--Title 

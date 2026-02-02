@@ -28,6 +28,13 @@
     font-weight: bold;
     font-size: 1.05rem;
     margin-bottom: 6px;
+    margin-left: 6px;
+}
+
+.Participant-Card--SubLight 
+{
+    white-space: nowrap;
+    grid-column: 3;
 }
 
 .Participant-Card--Sub 

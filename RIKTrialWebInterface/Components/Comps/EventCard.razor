@@ -11,10 +11,13 @@
             </div>
 
             <div class="Event-Card--Sub">
-                @Event.Location •
-                @Event.Date.ToString("dd.MM.yyyy") •
-
+                @Event.Location 
             </div>
+
+            <div>
+                @Event.Date.ToString("dd.MM.yyyy")
+            </div>
+
             <div class="Event-Card--Sub">
                 Osalejaid: @Event.ParticipantCount
             </div>

@@ -10,20 +10,24 @@
                 @Participant.FirstName @Participant.LastName
             </span>
 
-            <span class="Participant-Card--Sub">
+            <span class="@(IsLight
+                          ? "Participant-Card--SubLight"
+                          : "Participant-Card--Sub")">
                 @Participant.IdNumber
             </span>
+            @if (!IsLight)
+            {
+                <span class="Participant-Card--Sub">
+                </span>
 
-            <span class="Participant-Card--Sub">
-            </span>
+                <span class="Participant-Card--Sub">
+                    @Participant.PaymentMethod.PaymentMethod
+                </span>
 
-            <span class="Participant-Card--Sub">
-                @Participant.PaymentMethod.PaymentMethod
-            </span>
-
-            <span class="Participant-Card--Sub">
-                @Participant.AdditionalInfo
-            </span>
+                <span class="Participant-Card--Sub">
+                    @Participant.AdditionalInfo
+                </span>
+            }
 
         </div>
 
@@ -46,26 +50,32 @@
                 @Participant.Name
             </span>
 
-            <span class="Participant-Card--Sub">
+            <span class="@(IsLight
+                            ? "Participant-Card--SubLight"
+                            : "Participant-Card--Sub")">
                 @Participant.CompanyCode
             </span>
 
-            <span class="Participant-Card--Sub">
-                @if (Participant.ParticipantAmount is not null)
-                {
-                    <span class="extra">
-                        (@Participant.ParticipantAmount osalejat)
-                    </span>
-                }
-            </span>
+            @if(!IsLight)
+            {
+                <span class="Participant-Card--Sub">
+                    @if (Participant.ParticipantAmount is not null)
+                    {
+                        <span class="extra">
+                            (@Participant.ParticipantAmount osalejat)
+                        </span>
+                    }
+                </span>
 
-            <span class="Participant-Card--Sub">
-                @Participant.PaymentMethod.PaymentMethod
-            </span>
+                <span class="Participant-Card--Sub">
+                    @Participant.PaymentMethod.PaymentMethod
+                </span>
 
-            <span class="Participant-Card--Sub">
-                @Participant.AdditionalInfo
-            </span>
+                <span class="Participant-Card--Sub">
+                    @Participant.AdditionalInfo
+                </span>
+            }
+            
         </div>
         @if (ActionEnabled)
         {
@@ -92,6 +102,9 @@
 
     [Parameter]
     public EventCallback<Guid> ActionEvent { get; set; }
+
+    [Parameter]
+    public bool IsLight { get; set; } = false;
 
     [Inject]
     private NavigationManager Nav { get; set; } = null!;
