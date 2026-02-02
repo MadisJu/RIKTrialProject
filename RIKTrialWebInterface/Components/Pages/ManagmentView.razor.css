@@ -1,67 +1,104 @@
-﻿.Management-Tabs
-{
-    height: 5vh;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+.Management-Tabs {
+    display: flex;
+    gap: 12px;
+    padding: 8px 12px;
+    background: var(--background-color);
+    box-shadow: -5px 5px 12px rgba(0, 0, 0, 0.15);
+    margin-bottom: 12px;
 }
 
-.Management-Tab
-{
-    background-color:white;
+.Management-Tab {
+    flex: 1;
+    display: flex;
+    align-items: center;
     justify-content: center;
-    align-content: center;
+    padding: 10px 18px;
+    background-color: white;
+    cursor: pointer;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
 }
 
-.Management-Tab:hover
-{
-    background-color:royalblue;
+.Management-Tab:hover {
+    box-shadow: -5px 5px 12px rgba(0, 0, 0, 0.20);
+    transform: translateY(-1px);
 }
 
-.Management-Content
-{
-    
+.Management-Tab.active {
+    background: var(--primary-color);
+    color: var(--background-color);
+    box-shadow: -5px 5px 12px rgba(0, 0, 0, 0.20);
+    border-color: var(--primary-color);
 }
 
-.Participant-List
-{
-
+.Management-Content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
-.PaymentMethod-List
-{
-
+.Payment-Header {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: var(--primary-color);
+    color: var(--background-color);
+    padding: 12px 14px;
+    border-radius: 10px;
+    box-shadow: -5px 5px 12px rgba(0, 0, 0, 0.15);
 }
 
+.Payment-Header--Title {
+    font-weight: 700;
+    font-size: 1.05rem;
+}
 
-/*For the header for participant list*/
+.Payment-Header--Row {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 12px;
+}
+
+.Payment-Header--Row label {
+    font-weight: 600;
+    margin: 0;
+}
+
 .Participant-Card {
     display: grid;
     grid-template-columns: 9fr 1fr;
-    align-items: center;
-    padding: 4px 4px 4px 4px;
+    align-items: start;
+    padding: 10px 12px;
     margin-top: 2px;
-    background-color: royalblue;
+    background-color: var(--primary-color);
+    color: var(--background-color);
     transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
     box-shadow: -5px 5px 12px rgba(0, 0, 0, 0.05);
-    height: 2.5rem;
+    min-height: 2.5rem;
+    row-gap: 2px;
+    border-radius: 8px;
 }
 
 .Participant-Card--Main {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 2fr;
+    gap: 3px;
 }
 
 .Participant-Card--Title {
     font-weight: bold;
     font-size: 1.05rem;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
     padding-left: 6px;
 }
 
 .Participant-Card--Sub {
-    white-space: wrap;
+    white-space: normal;
+    word-break: break-word;
     padding-left: 6px;
-
+    font-weight: 600;
+    line-height: 1.2;
 }
 
 .Participant-Card--Btn {
@@ -74,12 +111,12 @@
     transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
 }
 
-    .Participant-Card--Btn img {
-        width: 16px;
-        height: 16px;
-    }
+.Participant-Card--Btn img {
+    width: 16px;
+    height: 16px;
+}
 
-        .Participant-Card--Btn img:hover {
-            width: 20px;
-            height: 20px;
-        }
+.Participant-Card--Btn img:hover {
+    width: 20px;
+    height: 20px;
+}

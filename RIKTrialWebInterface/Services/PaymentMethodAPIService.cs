@@ -1,4 +1,5 @@
-﻿using RIKTrialSharedModels.Domain.Returns;
+﻿using RIKTrialSharedModels.Domain.Creation;
+using RIKTrialSharedModels.Domain.Returns;
 using static System.Net.WebRequestMethods;
 
 namespace RIKTrialWebInterface.Services
@@ -37,6 +38,17 @@ namespace RIKTrialWebInterface.Services
                 content: null,
                 ctoken
                 );
+
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> CreatePaymentMethod(PaymentMethodCreationDTO data, CancellationToken ctoken = default)
+        {
+            HttpResponseMessage response = await _http.PostAsJsonAsync(
+                "api/PaymentMethod/paymentmethod",
+                data,
+                ctoken
+            );
 
             return response.IsSuccessStatusCode;
         }

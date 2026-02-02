@@ -21,13 +21,20 @@
 
 .Participant-Card--Main {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 2fr;
+    grid-template-columns: 1fr 1.5fr 1fr 1fr 2fr;
 }
 
 .Participant-Card--Title {
     font-weight: bold;
     font-size: 1.05rem;
     margin-bottom: 6px;
+    margin-left: 6px;
+}
+
+.Participant-Card--SubLight 
+{
+    white-space: nowrap;
+    grid-column: 3;
 }
 
 .Participant-Card--Sub 
