@@ -17,7 +17,7 @@ namespace RIKTrialWebInterface.Services
 
         public async Task<List<EventReturnDTO>> GetEvents(
             EventFilters filters,
-            CancellationToken cancellationToken = default
+            CancellationToken ctoken = default
         )
         {
             string url =
@@ -31,13 +31,13 @@ namespace RIKTrialWebInterface.Services
 
             return await _httpClient.GetFromJsonAsync<List<EventReturnDTO>>(
                        url,
-                       cancellationToken)
+                       ctoken)
                    ?? new List<EventReturnDTO>();
         }
 
         public async Task<EventDetailedReturnDTO?> GetEvent(
             Guid id,
-            CancellationToken cancellationToken = default
+            CancellationToken ctoken = default
         )
         {
             string url =
@@ -45,7 +45,7 @@ namespace RIKTrialWebInterface.Services
 
             return await _httpClient.GetFromJsonAsync<EventDetailedReturnDTO>(
                        url,
-                       cancellationToken)
+                       ctoken)
                    ?? null;
         }
 
@@ -81,6 +81,21 @@ namespace RIKTrialWebInterface.Services
             HttpResponseMessage response =
                 await _httpClient.PostAsync(
                     $"api/Events/register?ParticipantId={reg.ParticipantId}&EventId={reg.EventId}", 
+                    content: null,
+                    ctoken);
+
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> RemoveParticipant
+        (
+            RegistrationDTO reg,
+            CancellationToken ctoken = default
+        )
+        {
+            HttpResponseMessage response =
+                await _httpClient.PostAsync(
+                    $"api/Events/unregister?ParticipantId={reg.ParticipantId}&EventId={reg.EventId}",
                     content: null,
                     ctoken);
 

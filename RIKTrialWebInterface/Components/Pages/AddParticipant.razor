@@ -36,24 +36,22 @@
                 <label>Tüüp</label>
 
                 <InputRadioGroup @bind-Value="_model.Type"
-                                 TValue="ParticipantType">
+                                 TValue="ParticipantType"
+                                 Name="ParticipantType">
 
                     <label>
-                        <InputRadio TValue="ParticipantType"
-                                    Value="ParticipantType.PERSON" />
+                        <InputRadio Value="ParticipantType.PERSON" />
                         Eraisik
                     </label>
 
                     <label>
-                        <InputRadio TValue="ParticipantType"
-                                    Value="ParticipantType.COMPANY" />
+                        <InputRadio Value="ParticipantType.COMPANY" />
                         Ettevõte
                     </label>
 
                 </InputRadioGroup>
             </div>
 
-            <!-- Person Fields -->
             @if (_model.Type == ParticipantType.PERSON)
             {
                 <div class="Form-Row">
@@ -72,7 +70,6 @@
                 </div>
             }
 
-            <!-- Company Fields -->
             @if (_model.Type == ParticipantType.COMPANY)
             {
                 <div class="Form-Row">
@@ -157,6 +154,8 @@
 
     private async Task SubmitParticipant()
     {
+        Console.WriteLine("===== SUBMIT =====");
+        Console.WriteLine($"Type = {_model.Type}");
 
         Guid participantId = await ParticipantApi.CreateParticipant(_model);
 

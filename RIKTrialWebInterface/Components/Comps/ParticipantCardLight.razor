@@ -1,0 +1,82 @@
+﻿@using RIKTrialSharedModels.Domain.Returns
+@using RIKTrialSharedModels.Domain.Types
+
+<div class="Participant-Card" @onclick="GoToEdit">
+
+    @if (Participant.Type == ParticipantType.PERSON)
+    {
+        <div class="Participant-Card--Main">
+            <span class="Participant-Card--Title ">
+                @Participant.FirstName
+            </span>
+
+            <span class="Participant-Card--Sub">
+                @Participant.LastName
+            </span>
+
+            <span class="Participant-Card--Sub">
+                @Participant.IdNumber
+            </span>
+        </div>
+        <button class="Participant-Card--Btn"
+                type="button"
+                title="Kustuta Osaleja"
+                @onclick:stopPropagation="true"
+                @onclick:preventDefault="true"
+                @onclick="RemoveParticipant">
+            <img src="images/remove.svg" alt="Delete Participant" />
+        </button>
+    }
+    else
+    {
+        <div class="Participant-Card--Main">
+            <span class="Participant-Card--Title">
+                @Participant.Name
+            </span>
+
+            <span class="Participant-Card--Sub">
+                @Participant.CompanyCode
+            </span>
+
+            <span class="Participant-Card--Sub">
+                @if (Participant.ParticipantAmount is not null)
+                {
+                    <span class="Participant-Card--Sub">
+                        @Participant.ParticipantAmount osalejat
+                    </span>
+                }
+            </span>
+        </div>
+        <button class="Participant-Card--Btn"
+                type="button"
+                title="Kustuta Osaleja"
+                @onclick:stopPropagation="true"
+                @onclick:preventDefault="true"
+                @onclick="RemoveParticipant">
+            <img src="images/remove.svg" alt="Delete Participant" />
+        </button>
+    }
+
+</div>
+
+@code {
+
+    [Parameter]
+    public ParticipantLightReturnDTO Participant { get; set; } = null!;
+
+    [Parameter]
+    public EventCallback<Guid> RemoveParticipantEvent { get; set; }
+
+    [Inject]
+    private NavigationManager Nav { get; set; } = null!;
+
+    private void GoToEdit()
+    {
+        Nav.NavigateTo($"/participants/{Participant.Id}");
+    }
+
+    private async Task RemoveParticipant()
+    {
+        await RemoveParticipantEvent.InvokeAsync(Participant.Id);
+    }
+}

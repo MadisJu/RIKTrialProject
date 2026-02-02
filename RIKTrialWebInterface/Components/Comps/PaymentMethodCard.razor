@@ -1,0 +1,42 @@
+﻿@using RIKTrialSharedModels.Domain.Returns
+@using RIKTrialSharedModels.Domain.Types
+
+<div class="PaymentMethod-Card">
+
+    @if (Method != null)
+    {
+        <div class="PaymentMethod-Card--Main">
+            <span class="PaymentMethod-Card--Title">
+                @Method.PaymentMethod
+            </span>
+
+            <span class="PaymentMethod-Card--Sub">
+                Aktiivne : @(Method.Disabled ? "Ei" : "Jah")
+            </span>
+
+            <button class="Toggle-Switch @(Method.Disabled ? "off" : "on")"
+                    @onclick:stopPropagation="true"
+                    @onclick="Toggle">
+
+                <span class="Toggle-Knob"></span>
+            </button>
+        </div>
+    }
+
+</div>
+
+@code 
+{
+
+    [Parameter]
+    public PaymentMethodReturnDTO Method { get; set; } = null!;
+
+    [Parameter]
+    public EventCallback<int> MethodToggle { get; set; }
+
+    private async Task Toggle()
+    {
+        await MethodToggle.InvokeAsync(Method.Id);
+    }
+
+}

@@ -25,12 +25,23 @@ namespace RIKTrialServer.Controllers
             return Ok(await _paymentServ.CreatePaymentMethod(data, ctoken));
         }
 
+        [HttpGet]
+        [Route("allpaymentmethods")]
+        public async Task<ActionResult<List<PaymentMethodReturnDTO>>> GetAllPaymentMethods(CancellationToken ctoken)
+        {
+            return Ok(await _paymentServ.GetAllPaymentMethods(ctoken));
+        }
+
         [HttpPut]
         [Route("togglepaymentmethod")]
-
         public async Task<ActionResult<bool>> TogglePaymentMethod([FromQuery] int paymentId, CancellationToken ctoken)
         {
-            return Ok(await _paymentServ.TogglePaymentMethod(paymentId, ctoken));
+            bool ok = await _paymentServ.TogglePaymentMethod(paymentId, ctoken);
+
+            if (!ok)
+                return NotFound();
+
+            return NoContent();
         }
     }
 }

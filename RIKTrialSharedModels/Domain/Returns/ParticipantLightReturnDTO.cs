@@ -15,7 +15,7 @@ namespace RIKTrialSharedModels.Domain.Returns
         // For Company type
 
         public string? Name { get; set; }
-        public string? ComapnyCode { get; set; }
+        public string? CompanyCode { get; set; }
         public int? ParticipantAmount { get; set; }
     }
 }

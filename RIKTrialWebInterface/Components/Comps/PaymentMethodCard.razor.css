@@ -1,0 +1,65 @@
+﻿.PaymentMethod-Card {
+    display: grid;
+    grid-template-columns: 9fr 1fr;
+    align-items: center;
+    padding: 4px 4px 4px 4px;
+    margin-top: 2px;
+    background-color: white;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+    box-shadow: -5px 5px 12px rgba(0, 0, 0, 0.05);
+    height: 2.5rem;
+}
+
+.PaymentMethod-Card--Main {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 2fr;
+}
+
+.PaymentMethod-Card--Main {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 2fr;
+}
+
+.PaymentMethod-Card--Title {
+    font-weight: bold;
+    font-size: 1.05rem;
+    margin-bottom: 6px;
+}
+
+.PaymentMethod-Card--Sub {
+    white-space: nowrap;
+}
+
+/* Thanks gpt i honestly would have no idea how to do this one*/
+.Toggle-Switch {
+    width: 46px;
+    height: 24px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    transition: 0.2s;
+}
+
+    .Toggle-Switch.on {
+        background: #3cb371;
+    }
+
+    .Toggle-Switch.off {
+        background: #bbb;
+    }
+
+.Toggle-Knob {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: white;
+    position: absolute;
+    top: 3px;
+    left: 4px;
+    transition: 0.2s;
+}
+
+.Toggle-Switch.on .Toggle-Knob {
+    left: 24px;
+}

@@ -1,0 +1,69 @@
+﻿@using RIKTrialSharedModels.Domain.Returns
+@inject NavigationManager Nav
+
+<NavLink class="nav-link"
+         href="@($"/events/{Event.Id}")">
+    <div class="Event-Card">
+        <div class="Event-Card--Main">
+
+            <div class="Event-Card--Title">
+                @Event.Name
+            </div>
+
+            <div class="Event-Card--Sub">
+                @Event.Location •
+                @Event.Date.ToString("dd.MM.yyyy") •
+
+            </div>
+            <div class="Event-Card--Sub">
+                Osalejaid: @Event.ParticipantCount
+            </div>
+        </div>
+
+        @if (!IsPast)
+        {
+            <button class="Event-Card--Btn"
+                    type="button"
+                    title="Lisa osaleja"
+                    @onclick:stopPropagation="true"
+                    @onclick:preventDefault="true"
+                    @onclick="HandleAddParticipant">
+                <img src="images/plus-sign.svg" alt="Add Participant" />
+            </button>
+
+            <button class="Event-Card--Btn"
+                    type="button"
+                    title="Eemalda üritus"
+                    @onclick:stopPropagation="true"
+                    @onclick:preventDefault="true"
+                    @onclick="HandleRemove">
+                <img src="images/remove.svg" alt="Remove Event" />
+            </button>
+        }
+    </div>
+</NavLink>
+
+@code {
+
+    [Parameter]
+    public EventReturnDTO Event { get; set; } = null!;
+
+    [Parameter]
+    public EventCallback<Guid> OnAddParticipant { get; set; }
+
+    [Parameter]
+    public EventCallback<Guid> OnRemove { get; set; }
+
+    [Parameter]
+    public bool IsPast { get; set; } = false;
+
+    private async Task HandleAddParticipant()
+    {
+        await OnAddParticipant.InvokeAsync(Event.Id);
+    }
+
+    private async Task HandleRemove()
+    {
+        await OnRemove.InvokeAsync(Event.Id);
+    }
+}

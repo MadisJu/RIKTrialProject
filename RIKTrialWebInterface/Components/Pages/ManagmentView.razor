@@ -1,5 +1,150 @@
-﻿<h3>ManagmentView</h3>
+﻿@page "/management"
 
-@code {
+@using RIKTrialSharedModels.Domain.Filters
+@using RIKTrialWebInterface.Components.Comps
 
+@inject ParticipantAPIService ParticipantApi
+@inject PaymentMethodAPIService PaymentAPI
+
+<Banner BannerTitle="Management Tab"/>
+
+<div class="Management-Tabs">
+
+    <div class="Management-Tab @(participantView ? "active" : "")"
+         @onclick="() => participantView = true">
+        Osalejad
+    </div>
+
+    <div class="Management-Tab @(!participantView ? "active" : "")"
+         @onclick="() => participantView = false">
+        Makseviisid
+    </div>
+
+</div>
+
+<div class="Management-Content">
+
+    @if (participantView)
+    {
+        <div class="Participant-Card">
+            <div class="Participant-Card--Main">
+                <span class="Participant-Card--Title">
+                    Osaleja Nimi / Ettevõtte nimi
+                </span>
+
+                <span class="Participant-Card--Sub">
+                    Isikukood / Registrikood
+                </span>
+
+                <span class="Participant-Card--Sub">
+                    Osalejate arv (Ettevõte)
+                </span>
+
+                <span class="Participant-Card--Sub">
+                    Makseviis
+                </span>
+
+                <span class="Participant-Card--Sub">
+                    Lisainfo
+                </span>
+            </div>
+            <span class="Participant-Card--Sub">
+                Kustuta
+            </span>
+        </div>
+        <div class="Participant-List">
+            @foreach (ParticipantReturnDTO p in _participants)
+            {
+                <ParticipantCard Participant="p" ActionEnabled ="true"
+                                 ActionEvent="DeleteParticipant"/>
+            }
+        </div>
+        <PagingBar
+            Page="_participantPage"
+            PageSize="PageSize"
+            CurrentCount="_participants?.Count ?? 0"
+            OnNext="NextParticipants"
+            OnPrev="PrevParticipants"/>
+    }
+    else
+    {
+        <div class="PaymentMethod-List">
+            @foreach (PaymentMethodReturnDTO m in _paymentMethods)
+            {
+                <PaymentMethodCard Method="m"
+                                   MethodToggle="ToggleMethod" 
+                                   />
+            }
+        </div>
+    }
+
+</div>
+
+
+
+@code 
+{
+    private bool participantView = true;
+
+    private List<ParticipantReturnDTO> _participants = new();
+
+    private List<PaymentMethodReturnDTO> _paymentMethods = new();
+
+    private int _participantPage = 1;
+
+    private const int PageSize = 10;
+
+    protected async override Task OnInitializedAsync()
+    {
+        await LoadParticipants();
+        _paymentMethods = await PaymentAPI.GetAllPaymentMethods();
+    }
+
+    private async Task ToggleMethod(int methodId)
+    {
+        bool success =
+            await PaymentAPI.TogglePaymentMethod(methodId);
+
+        if (!success)
+            return;
+
+        _paymentMethods =
+            await PaymentAPI.GetAllPaymentMethods();
+    }
+
+    private async Task DeleteParticipant(Guid userId)
+    {
+        bool success =
+            await ParticipantApi.DeleteParticipant(userId);
+
+        if (!success)
+            return;
+
+        await LoadParticipants();
+    }
+
+    private async Task NextParticipants()
+    {
+        _participantPage++;
+        await LoadParticipants();
+    }
+
+    private async Task PrevParticipants()
+    {
+        if(_participantPage > 1)
+            _participantPage--;
+        await LoadParticipants();
+    }
+
+    private async Task LoadParticipants()
+    {
+        ParticipantFilters filters = new()
+            {
+                Page = _participantPage,
+                PageSize = PageSize
+            };
+
+        _participants = await ParticipantApi.GetAllParticipants(filters);
+        StateHasChanged();
+    }
 }
